@@ -1,0 +1,7 @@
+authorize
+http://localhost:3000/authorize?client_id=thom&response_type=code&username=thomseddon&password=nightworld&state=a&redirect_uri=https%3A%2F%2Fwww.google.com
+
+token
+http://localhost:3000/token?client_id=thom&grant_type=authorization_code&code={AUTHORIZATION_CODE}&redirect_uri=https%3A%2F%2Fwww.google.com
+e.g.
+http://localhost:3000/token?client_id=thom&grant_type=authorization_code&code=ce215595e87d3418be9e16c8cfac58aa7abbdb73&redirect_uri=https%3A%2F%2Fwww.google.com

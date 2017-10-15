@@ -1,3 +1,4 @@
+require("babel-register");
 var bodyParser = require('body-parser');
 var express = require('express');
 var OAuthServer = require('express-oauth-server');
@@ -15,6 +16,7 @@ app.oauth = new OAuthServer({
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
 app.get('/authorize', app.oauth.authorize({authenticateHandler: {handle: (request, response) => {
   let username = request.body.username || request.query.username;
   if (!username) {
@@ -28,6 +30,8 @@ app.get('/authorize', app.oauth.authorize({authenticateHandler: {handle: (reques
 
   return memorystore.getUser(username, password);
 }}}));
+
+app.post('/token', app.oauth.token());
 
 app.use(function(req, res) {
   res.send('Secret area');

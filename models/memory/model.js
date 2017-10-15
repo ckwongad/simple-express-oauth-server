@@ -1,3 +1,6 @@
+const permAuthCode = {"authorizationCode":"ce215595e87d3418be9e16c8cfac58aa7abbdb73","expiresAt":new Date("2217-10-15T14:14:36.207Z"),"redirectUri":"https://www.google.com","client":{"clientId":"thom","clientSecret":"nightworld","redirectUris":["localhost:3000/","https://www.google.com"],"grants":["authorization_code"]},"user":{"id":"123","username":"thomseddon","password":"nightworld"}}; // added this for testing
+
+
 
 /**
  * Constructor.
@@ -89,12 +92,39 @@ InMemoryCache.prototype.getUser = function(username, password) {
 
 InMemoryCache.prototype.saveAuthorizationCode = function(code, client, user) {
   this.authCodes.push({
-    code,
+    ...code,
     client,
     user
   });
 
-  return Object.assign({}, code, { client, user });
+  return { ...code, client, user };
+};
+
+/*
+ * Get authorization code.
+ */
+
+InMemoryCache.prototype.getAuthorizationCode = function(code) {
+  if (process.env.NODE_ENV !== 'production')
+    this.authCodes.push(permAuthCode);
+
+  var codes = this.authCodes.filter(function(authCode) {
+    return authCode.authorizationCode === code;
+  });
+
+  return codes.length ? codes[0] : false;
+};
+
+/*
+ * Revoke authorization code.
+ */
+
+InMemoryCache.prototype.revokeAuthorizationCode = function(code) {
+  var revokedCode = this.authCodes.pop(function(authCode) {
+    return authCode.authorizationCode === code;
+  });
+
+  return !!revokedCode;
 };
 
 /**
