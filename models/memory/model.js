@@ -4,7 +4,8 @@
  */
 
 function InMemoryCache() {
-  this.clients = [{ clientId : 'thom', clientSecret : 'nightworld', redirectUris : [''] }];
+  this.clients = [{ clientId : 'thom', clientSecret : 'nightworld', redirectUris : ['localhost:3000/', 'https://www.google.com'], grants: ['authorization_code'] }];
+  this.authCodes = [];
   this.tokens = [];
   this.users = [{ id : '123', username: 'thomseddon', password: 'nightworld' }];
 }
@@ -49,7 +50,7 @@ InMemoryCache.prototype.getRefreshToken = function(bearerToken) {
 
 InMemoryCache.prototype.getClient = function(clientId, clientSecret) {
   var clients = this.clients.filter(function(client) {
-    return client.clientId === clientId && client.clientSecret === clientSecret;
+    return client.clientId === clientId && (!clientSecret || client.clientSecret === clientSecret);
   });
 
   return clients.length ? clients[0] : false;
@@ -80,6 +81,20 @@ InMemoryCache.prototype.getUser = function(username, password) {
   });
 
   return users.length ? users[0] : false;
+};
+
+/*
+ * Save authorization code.
+ */
+
+InMemoryCache.prototype.saveAuthorizationCode = function(code, client, user) {
+  this.authCodes.push({
+    code,
+    client,
+    user
+  });
+
+  return Object.assign({}, code, { client, user });
 };
 
 /**

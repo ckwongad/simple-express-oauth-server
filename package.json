@@ -11,7 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.1",
-    "express-oauth-server": "^2.0.0"
+    "express-oauth-server": "^2.0.0",
+    "standard-http-error": "^2.0.1"
   },
   "devDependencies": {
     "nodemon": "^1.12.1"
